@@ -6,6 +6,7 @@ import { Pizza } from '../../models/pizza.model';
 export const LOAD_PIZZAS = '[Products] Load Pizzas';
 export const LOAD_PIZZAS_FAIL = '[Products] Load Pizzas Fail';
 export const LOAD_PIZZAS_SUCCESS = '[Products] Load Pizzas Success';
+export const APOLLO_TEST = '[Products] load graphql data';
 
 export class LoadPizzas implements Action {
   readonly type = LOAD_PIZZAS;
@@ -19,6 +20,12 @@ export class LoadPizzasFail implements Action {
 export class LoadPizzasSuccess implements Action {
   readonly type = LOAD_PIZZAS_SUCCESS;
   constructor(public payload: Pizza[]) {}
+}
+
+
+export class ApolloTest implements Action {
+    readonly type = APOLLO_TEST;
+    constructor() {}
 }
 
 // create pizza
@@ -82,16 +89,4 @@ export class RemovePizzaSuccess implements Action {
 }
 
 // action types
-export type PizzasAction =
-  | LoadPizzas
-  | LoadPizzasFail
-  | LoadPizzasSuccess
-  | CreatePizza
-  | CreatePizzaFail
-  | CreatePizzaSuccess
-  | UpdatePizza
-  | UpdatePizzaFail
-  | UpdatePizzaSuccess
-  | RemovePizza
-  | RemovePizzaFail
-  | RemovePizzaSuccess;
+export type PizzasAction = LoadPizzas | LoadPizzasFail | LoadPizzasSuccess | CreatePizza | CreatePizzaFail | CreatePizzaSuccess | UpdatePizza | UpdatePizzaFail | UpdatePizzaSuccess | RemovePizza | RemovePizzaFail | RemovePizzaSuccess | ApolloTest;

@@ -16,6 +16,11 @@ import { reducers, effects, CustomSerializer } from './store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { storeFreeze } from 'ngrx-store-freeze';
 
+import { HttpClientModule } from "@angular/common/http";
+import { ApolloModule, Apollo } from "apollo-angular";
+import { HttpLinkModule, HttpLink } from "apollo-angular-link-http";
+import { InMemoryCache } from "apollo-cache-inmemory";
+
 // this would be done dynamically with webpack for builds
 const environment = {
   development: true,
@@ -42,14 +47,26 @@ export const ROUTES: Routes = [
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    HttpClientModule, // provides HttpClient for HttpLink
+    ApolloModule,
+    HttpLinkModule,
     RouterModule.forRoot(ROUTES),
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot(effects),
     StoreRouterConnectingModule,
-    environment.development ? StoreDevtoolsModule.instrument() : [],
+    environment.development ? StoreDevtoolsModule.instrument() : []
   ],
   providers: [{ provide: RouterStateSerializer, useClass: CustomSerializer }],
   declarations: [AppComponent],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+  constructor(apollo: Apollo, httpLink: HttpLink) {
+    apollo.create({
+        link: httpLink.create({
+            uri: "https://api.graph.cool/simple/v1/cjckd7s7007dy0145rvhjdm49"
+        }),
+        cache: new InMemoryCache()
+    });
+  }
+}

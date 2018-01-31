@@ -1,15 +1,17 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Apollo } from "apollo-angular";
+import gql from "graphql-tag";
 
-import { Observable } from 'rxjs/Observable';
-import { catchError } from 'rxjs/operators';
-import 'rxjs/add/observable/throw';
+import { Observable } from "rxjs/Observable";
+import { catchError } from "rxjs/operators";
+import "rxjs/add/observable/throw";
 
-import { Pizza } from '../models/pizza.model';
+import { Pizza } from "../models/pizza.model";
 
 @Injectable()
 export class PizzasService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private apollo: Apollo) {}
 
   getPizzas(): Observable<Pizza[]> {
     return this.http
@@ -33,5 +35,21 @@ export class PizzasService {
     return this.http
       .delete<any>(`/api/pizzas/${payload.id}`)
       .pipe(catchError((error: any) => Observable.throw(error.json())));
+  }
+
+  getGraphqlData(): Observable<any> {
+    // We use the gql tag to parse our query string into a query document
+    const CurrentUserForProfile = gql`
+        query {
+            Campaign(id: "cjckdx9ot0ldc0199aow0bkh4") {
+                id
+                name
+                city
+            }
+        }
+    `;
+    return this.apollo.watchQuery<any>({
+      query: CurrentUserForProfile
+    }).valueChanges;
   }
 }

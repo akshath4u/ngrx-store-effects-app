@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import * as fromStore from '../../store';
 import { Pizza } from '../../models/pizza.model';
+import { ApolloTest } from '../../store';
 
 @Component({
   selector: 'products',
@@ -13,7 +14,7 @@ import { Pizza } from '../../models/pizza.model';
     <div class="products">
       <div class="products__new">
         <a
-          class="btn btn__ok" 
+          class="btn btn__ok"
           routerLink="./new">
           New Pizza
         </a>
@@ -37,5 +38,6 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit() {
     this.pizzas$ = this.store.select(fromStore.getAllPizzas);
+    this.store.dispatch(new ApolloTest());
   }
 }

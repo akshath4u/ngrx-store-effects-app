@@ -47,7 +47,7 @@ export class PizzasEffects {
       map((action: pizzaActions.CreatePizzaSuccess) => action.payload),
       map(pizza => {
         return new fromRoot.Go({
-          path: ['/products', pizza.id],
+          path: ["/products", pizza.id]
         });
       })
     );
@@ -87,8 +87,21 @@ export class PizzasEffects {
     .pipe(
       map(pizza => {
         return new fromRoot.Go({
-          path: ['/products'],
+          path: ["/products"]
         });
       })
     );
+
+  @Effect({ dispatch: false })
+  apolloTest$ = this.actions$.ofType(pizzaActions.APOLLO_TEST).pipe(
+    switchMap(() => {
+      return this.pizzaService
+        .getGraphqlData()
+        .pipe(
+            map(data => {
+                console.log("apolloTest:::::", data);
+            })
+        )
+    })
+  );
 }
